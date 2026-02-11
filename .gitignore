@@ -1,0 +1,32 @@
+# CLion / JetBrains
+.idea/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+compile_commands.json
+
+# Executables
+*.exe
+*.out
+
+# Object / build files
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+
+# Logs
+*.log
+
+# Temporary judging data
+temporaryData/
+judgingResults/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Cmake
+CMakeLists.txt
+*.cmake
