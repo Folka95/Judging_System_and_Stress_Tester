@@ -1,6 +1,6 @@
 // This is the testcase generator
 #include <bits/stdc++.h>
-#include "testGenrator.h"
+#include "testGenerator.h"
 using namespace std;
 
 int main() {

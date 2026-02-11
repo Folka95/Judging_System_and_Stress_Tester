@@ -3,10 +3,10 @@
 using namespace std;
 
 // Problem Constraints :
-const double timeLimit = 1000; // ms (Recommended to use
-const int stressTestCount = 100; // Number of stress tests done (Stop on first wrong answer)
-const bool stopOnTimeLimit = false;
-const bool saveAllTestsLogs = false;
+const double timeLimit = 1000 * 1.05; // ms (Recommended to use factor like '1.05' to be in safe zone)
+const int stressTestCount = 100; // Number of stress tests done (Stop on first wrong answer on stress tests ONLY)
+const bool stopOnTimeLimit = false; // Break on Time limit (Sample not affected)
+const bool saveAllTestsLogs = false; // Save all test results
 
 
 void initialize();
@@ -36,6 +36,7 @@ bool runTest(const string &testFile, const string &testName, const string &saveP
         }
     }
     bool isWA = false;
+    bool bad = false;
     for(auto &[fileName, time, AC] : sols) {
         cout << testName << string(3, ' ') << "| ";
         cout << fileName << string(3, ' ') << "| ";
@@ -43,12 +44,21 @@ bool runTest(const string &testFile, const string &testName, const string &saveP
         cout << time << "ms" << string(3, ' ');
         if(time > timeLimit) {
             cout << " (time limit exceeded)";
+            if(stopOnTimeLimit) {
+                isWA = true;
+            }
+            bad = true;
         }
         cout << endl;
         isWA |= !AC;
+        bad |= isWA;
     }
-    cout << endl;
-
+    if(!saveAllTestsLogs) {
+        if(!bad) {
+            deletePath(savePath);
+        }
+    }
+    cout << string(50, '-') << endl;
     return isWA;
 }
 
@@ -129,7 +139,7 @@ void initialize() {
 }
 
 void exit() {
-    // deletePath(tempPath);
+    deletePath(tempPath);
 }
 
 bool validateSolution(const string &answerFilePath, const string &filePath) {
