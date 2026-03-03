@@ -72,13 +72,6 @@ using namespace std;
  *   - Generates a random connected weighted graph.
  *   - Each edge is [node1, node2, weight].
  *
- * -------------------- Directed Graph Generators --------------------
- * static vector<vector<int>> generateDirectedUnweightedGraph(int numberOfNodes, int minNumberOfEdges, int maxNumberOfEdges, bool printTheSample)
- *   - Generates a random directed unweighted graph.
- *
- * static vector<vector<long long>> generateDirectedWeightedGraph(int numberOfNodes, int minNumberOfEdges, int maxNumberOfEdges, long long weightLowerBound, long long weightUpperBound, bool printTheSample)
- *   - Generates a random directed weighted graph.
- *
  * -------------------- String Generators --------------------
  * static string generateString(int length, string all)
  *   - Generates a string of given length using characters from 'all'.
@@ -101,15 +94,20 @@ struct Random {
 };
 Random rnd;
 
-
 class FolkaGenerator {
 private:
 
 public:
     // Printing functions
-    static void printVector(auto myVec);
-    static void printGraph(auto myUGraph);
-    static void shuffleVector(auto myVec);
+    template< typename T >
+    static void printVector(const vector< T > &myVec);
+
+    template< typename T >
+    static void printGraph(const vector< vector< T > > &);
+
+    template< typename T >
+    static void shuffleVector(vector< T > &myVec);
+
     static vector< long long > splitValue(long long valueToSplit, int numberOfSplits, bool hasZeroes);
 
     // Generating Vectors
@@ -140,7 +138,8 @@ public:
 };
 
 // Implementation
-void FolkaGenerator::printVector(auto myVec) {
+template< typename T >
+void FolkaGenerator::printVector(const vector< T > &myVec) {
     for(int i = 0; i < (int)myVec.size(); i++) {
         cout << myVec[i];
         if(i + 1 < (int)myVec.size()) {
@@ -149,23 +148,25 @@ void FolkaGenerator::printVector(auto myVec) {
     }
 }
 
-void FolkaGenerator::printGraph(auto myUGraph) {
-    for(int i = 0; i < myUGraph.size(); i++) {
-        for(int j = 0; j < myUGraph[i].size(); j++) {
+template< typename T >
+void FolkaGenerator::printGraph(const vector< vector< T > > &myUGraph) {
+    for(int i = 0; i < (int)myUGraph.size(); i++) {
+        for(int j = 0; j < (int)myUGraph[i].size(); j++) {
             cout << myUGraph[i][j];
-            if(j + 1 < myUGraph[i].size()) {
+            if(j + 1 < (int)myUGraph[i].size()) {
                 cout << " ";
             }
         }
-        if(i + 1 < myUGraph.size()) {
+        if(i + 1 < (int)myUGraph.size()) {
             cout << endl;
         }
     }
 }
 
-static void shuffleVector(auto myVec) {
-    vector< int > p = generatePermutationVector(myVec.size(), false);
-    auto tmp = myVec;
+template< typename T >
+void FolkaGenerator::shuffleVector(vector< T > &myVec) {
+    vector< int > p = generatePermutationVector((int)myVec.size(), false);
+    vector< T > tmp = myVec;
     for(int i = 0; i < (int)p.size(); i++) {
         tmp[i] = myVec[p[i] - 1];
     }
@@ -173,7 +174,7 @@ static void shuffleVector(auto myVec) {
 }
 
 
-static vector< long long > splitValue(long long valueToSplit, int numberOfSplits, bool hasZeroes) {
+vector< long long > FolkaGenerator::splitValue(long long valueToSplit, int numberOfSplits, bool hasZeroes) {
     vector< long long > result;
     for (int step = 1; step <= numberOfSplits; step++) {
         long long minValue = hasZeroes ? 0 : 1;
@@ -265,7 +266,7 @@ vector< vector< long long > > FolkaGenerator::generateLinerUnweightedTree(int nu
 vector< vector< int > > FolkaGenerator::generateUnconnectedUnweightedGraph(int numberOfNodes, int minNumberOfEdges, int maxNumberOfEdges, bool includeCycle, bool printTheSample) {
     vector< vector< long long > > tmp = generateUnconnectedWeightedGraph(numberOfNodes, minNumberOfEdges, maxNumberOfEdges, 0, 0, includeCycle, false);
     vector< vector< int > > sample;
-    for(int i = 0; i < tmp.size(); i++) {
+    for(int i = 0; i < (int)tmp.size(); i++) {
         int x = tmp[i][0];
         int y = tmp[i][1];
         sample.push_back({x, y});
@@ -298,7 +299,7 @@ vector< vector< long long > > FolkaGenerator::generateUnconnectedWeightedGraph(i
 vector< vector< int > > FolkaGenerator::generateConnectedUnweightedGraph(int numberOfNodes, int minNumberOfEdges, int maxNumberOfEdges, bool includeCycle, bool printTheSample) {
     vector< vector< long long > > tmp = generateConnectedWeightedGraph(numberOfNodes, minNumberOfEdges, maxNumberOfEdges, 0, 0, includeCycle, false);
     vector< vector< int > > sample;
-    for(int i = 0; i < tmp.size(); i++) {
+    for(int i = 0; i < (int)tmp.size(); i++) {
         int x = tmp[i][0];
         int y = tmp[i][1];
         sample.push_back({x, y});
